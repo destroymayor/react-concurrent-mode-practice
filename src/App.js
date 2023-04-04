@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useTransition, useMemo } from 'react'
+import { v4 as uuidv4 } from 'uuid'
+import FPS from './FPS'
+import List from './List'
+import Range from './Range'
+
+import './App.css'
 
 function App() {
+  const [count, setCount] = useState('')
+  const [isPending, startTransition] = useTransition()
+
+  const listData = useMemo(() => Array.from({ length: count }, () => uuidv4()), [count])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div className="range-wrapper">
+        <FPS />
+        <Range
+          title="Synchronous"
+          onChange={(value) => {
+            setCount(value)
+          }}
+        />
+        <Range
+          title="Concurrent Mode"
+          onChange={(value) => {
+            startTransition(() => {
+              setCount(value)
+            })
+          }}
+        />
+      </div>
+
+      <List isPending={isPending} data={listData} />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

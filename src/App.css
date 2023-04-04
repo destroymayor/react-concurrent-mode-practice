@@ -19,6 +19,12 @@
   gap: 10px;
 }
 
+.quantity {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .list {
   display: flex;
   flex-wrap: wrap;

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function Range({ title, onChange }) {
+function Range({ title, maxQuantity = 3000, onChange }) {
   const [rangeValue, setRangeValue] = useState(0)
 
   const handleChange = (e) => {
@@ -13,7 +13,7 @@ function Range({ title, onChange }) {
     <div className="range">
       <span>{title}</span>
       <div className="range-content">
-        <input type="range" min="0" max="3000" value={rangeValue} onChange={handleChange} />
+        <input type="range" min="0" max={maxQuantity} value={rangeValue} onChange={handleChange} />
         <span>{rangeValue}</span>
       </div>
     </div>

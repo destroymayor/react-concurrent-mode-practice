@@ -1,4 +1,4 @@
-import { useState, useTransition, useMemo } from 'react'
+import { useState, useTransition, useMemo, useDeferredValue } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import FPS from './FPS'
 import List from './List'
@@ -8,10 +8,12 @@ import './App.css'
 
 function App() {
   const [maxQuantity, setMaxQuantity] = useState(3000)
-  const [listCount, setListCount] = useState('')
+  const [synchronousListCount, setSynchronousListCount] = useState('')
+  const [concurrentModeListCount, setConcurrentModeListCount] = useState('')
   const [isPending, startTransition] = useTransition()
 
-  const listData = useMemo(() => Array.from({ length: listCount }, () => uuidv4()), [listCount])
+  const synchronousListData = useMemo(() => Array.from({ length: synchronousListCount }, () => uuidv4()), [synchronousListCount])
+  const deferredListData = useDeferredValue(Array.from({ length: concurrentModeListCount }, () => uuidv4()))
 
   return (
     <div>
@@ -21,7 +23,7 @@ function App() {
           maxQuantity={maxQuantity}
           title="Synchronous"
           onChange={(value) => {
-            setListCount(value)
+            setSynchronousListCount(value)
           }}
         />
         <Range
@@ -29,7 +31,7 @@ function App() {
           title="Concurrent Mode"
           onChange={(value) => {
             startTransition(() => {
-              setListCount(value)
+              setConcurrentModeListCount(value)
             })
           }}
         />
@@ -39,7 +41,8 @@ function App() {
         </div>
       </div>
 
-      <List isPending={isPending} data={listData} />
+      <List data={synchronousListData} />
+      <List isPending={isPending} data={deferredListData} />
     </div>
   )
 }

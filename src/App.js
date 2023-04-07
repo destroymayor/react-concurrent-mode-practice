@@ -1,4 +1,4 @@
-import { useState, useTransition, useMemo, useDeferredValue } from 'react'
+import { useState, useTransition, useMemo, useDeferredValue, Suspense } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import FPS from './FPS'
 import List from './List'
@@ -42,7 +42,9 @@ function App() {
       </div>
 
       <List data={synchronousListData} />
-      <List isPending={isPending} data={deferredListData} />
+      <Suspense fallback={<div>loading...</div>}>
+        <List isPending={isPending} data={deferredListData} />
+      </Suspense>
     </div>
   )
 }
